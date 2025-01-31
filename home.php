@@ -38,10 +38,10 @@ require 'auth.php';
                         <ul class="nav navbar-nav">
                             <li>
                                 <form method="post" action="/home/news/" class="navbar-form">
-                                    {% csrf_token%}
                                     <div class="form-group">
                                         <div class="input-group">
-                                            <input type="search" name="search_term"  placeholder="Search Anything Here..." class="form-control">
+                                            <!-- <input type="search" name="search_term"  placeholder="Search Anything Here..." class="form-control"> -->
+                                            <input type="text" name="search" placeholder="Search for news" class='form-control' required >
                                             <span class="input-group-addon"><span class="glyphicon glyphicon-search"></span></span>
                                         </div>
                                     </div>
@@ -241,8 +241,9 @@ require 'auth.php';
         $base_url='https://newsapi.org/v2/everything';
         $api_key='10f52cca4c424851ae09f32027b3b908';
         //srtting the parameters for the api 
+        $search = isset($_GET['search']) ? trim($_GET['search']) : 'news';
         $params=[ 
-            'q'=>'News',
+            'q'=>$search ,
             'from'=>'2025-01-01',
             'sortBy'=>'popularity',
             'apiKey'=>$api_key,
@@ -254,8 +255,10 @@ require 'auth.php';
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true); 
         curl_setopt($ch, CURLOPT_TIMEOUT, 30);
+        curl_setopt($ch, CURLOPT_USERAGENT, 'MyNewsApp/1.0 (http://localhost:3000/home.php)');
 
         $response = curl_exec($ch);
+
 
         if (curl_errno($ch)) {
             $error = curl_error($ch);
@@ -319,6 +322,8 @@ require 'auth.php';
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true); 
     curl_setopt($ch, CURLOPT_TIMEOUT, 30);
+    curl_setopt($ch, CURLOPT_USERAGENT, 'MyNewsApp/1.0 (http://localhost:3000/home.php)');
+
 
     $response = curl_exec($ch);
 
